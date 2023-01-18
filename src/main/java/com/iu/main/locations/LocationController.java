@@ -49,8 +49,11 @@ public class LocationController {
 				System.out.println("검색할 주소 입력");
 				String add = sc.next();
 				ar = locationDAO.getFind(add);
+				if(ar.size() != 0) {
 				locationView.view(ar);
-				
+				}else {
+					System.out.println("Data가 없습니다");
+				}
 				break;
 			default:
 				check = false;

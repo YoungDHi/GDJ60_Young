@@ -42,8 +42,11 @@ public class EmployeeController {
 				System.out.println("사원의 이름을 검색해주세요");
 				String add = sc.next();
 				ar = employeeDAO.getFind(add);
-				employeeView.view(ar);
-				
+				if(ar.size() != 0) {
+					employeeView.view(ar);
+				}else {
+					System.out.println("Data가 없습니다");
+				}
 				
 				break;
 			default:
