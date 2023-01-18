@@ -48,7 +48,7 @@ public class DepartmentDAO {
 		
 		
 		//3. query문 생성
-		String sql = "SELECT * from DEPARTMENTS";
+		String sql = "SELECT * FROM DEPARTMENTS";
 		//4. query문 미리 전송
 		PreparedStatement st = connection.prepareStatement(sql);
 		//5. ? 세팅
