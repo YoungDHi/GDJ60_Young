@@ -7,37 +7,35 @@ import java.sql.ResultSet;
 
 public class DBConnection {
 	
-	public void getConnection() throws Exception {
+	public static Connection getConnection() throws Exception {
+		//1. 접속 정보 준비
+		
 		//1. id
 		String username="hr";
 		//2. pw
 		String password="hr";
 		//3. url
+		//String url="jdbc:oracle:thin:@ip:port/ServiceName";
+		//String url="jdbc:oracle:thin:@ip:port:SID";
 		String url="jdbc:oracle:thin:@localhost:1521/XEPDB1";
-		//4. driver 정보
-		String driver="oracle.jdbc.OracleDriver";
+		//4. driver 정보, 패키지형태와 비슷
+		String driver="oracle.jdbc.driver.OracleDriver";
+		
 		
 		Class.forName(driver);
 		
 		Connection connection = DriverManager.getConnection(url, username, password);
 		
-		String sql="SELECT * FROM EMPLOYEES";
+		return connection;
 		
-		PreparedStatement st = connection.prepareStatement(sql);
+	}
+	
+	public static void disconnect(ResultSet rs, PreparedStatement st, Connection connection) throws Exception{
 		
-		ResultSet rs = st.executeQuery();
+		rs.close();
+		st.close();
+		connection.close();
 		
-		while(rs.next()) {
-			System.out.println(rs.getString("FIRST_NAME"));
-			System.out.println(rs.getString("PHONE_NUMBER"));
-			System.out.println(rs.getDate("HIRE_DATE"));
-			System.out.println(rs.getString("COMMISSION_PCT"));
-			System.out.println("-------------------------");
-			
-			
-			
-			
-		}
 		
 	}
 
