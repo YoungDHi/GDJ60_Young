@@ -6,9 +6,69 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import com.iu.main.employees.EmployeeDTO;
 import com.iu.main.util.DBConnection;
 
 public class LocationDAO {
+	
+	public int updateDate(LocationDTO locationDTO) throws Exception {
+		Connection connection = DBConnection.getConnection();
+		
+		String sql = "UPDATE LOCATIONS SET STREET_ADDRESS =?, POSTAL_CODE=? "
+				+ "WHERE LOCATION_ID=?";
+		PreparedStatement st = connection.prepareStatement(sql);
+		
+		st.setString(1, locationDTO.getStreet_address());
+		st.setString(2, locationDTO.getPostal_code());
+		st.setInt(3, locationDTO.getLocation_id());
+		
+		DBConnection.disconnert(st, connection);
+		
+		int result = st.executeUpdate();
+		
+		return result;
+		
+		
+	}
+	
+	public int deleteData(LocationDTO locationDTO) throws Exception {
+		Connection connection = DBConnection.getConnection();
+		
+		String sql = "DELETE LOCATIONS WHERE LOCATION_ID = ?";
+		
+		PreparedStatement st = connection.prepareStatement(sql);
+		
+		st.setInt(1, locationDTO.getLocation_id());
+		
+		int result = st.executeUpdate();
+		
+		DBConnection.disconnert(st, connection);
+		
+		return result;
+		
+	}
+	
+	public int setData(LocationDTO locationDTO) throws Exception {
+		Connection connection = DBConnection.getConnection();
+		
+		String sql = "INSERT INTO LOCATIONS (LOCATION_ID, STREET_ADDRESS, POSTAL_CODE, CITY, STATE_PROVINCE, COUNTRY_ID) "
+				+ "VALUES (LOCATIONS_SEQ.NEXTVAL, ?, ?, ?, ?, ?)";
+		
+		PreparedStatement st = connection.prepareStatement(sql);
+		
+		st.setString(1, locationDTO.getStreet_address());
+		st.setString(2, locationDTO.getPostal_code());
+		st.setString(3, locationDTO.getCity());
+		st.setString(4, locationDTO.getState_province());
+		st.setString(5, locationDTO.getCountry_id());
+		
+		int result = st.executeUpdate();
+		DBConnection.disconnert(st, connection);
+		
+		return result;
+		
+		
+	}
 	
 	public ArrayList<LocationDTO> getFind(String search) throws Exception {
 		ArrayList<LocationDTO> ar = new ArrayList<LocationDTO>();

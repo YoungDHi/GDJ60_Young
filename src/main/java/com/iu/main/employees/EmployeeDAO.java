@@ -9,16 +9,104 @@ import com.iu.main.util.DBConnection;
 
 public class EmployeeDAO {
 	
-	public ArrayList<EmployeeDTO> getFind(String search) throws Exception{
+	public double[] getAvg() throws Exception {
+		Connection connection = DBConnection.getConnection();
+		
+		String sql = "SELECT AVG(SALARY), SUM(SALARY) FROM EMPLOYEES";
+		
+		PreparedStatement st = connection.prepareStatement(sql);
+		
+		ResultSet rs = st.executeQuery();
+		
+		rs.next();
+		
+		System.out.println(rs.getDouble(1));
+		System.out.println(rs.getInt(2));
+		
+		//ArrayList<Double> result = new ArrayList<Double>();
+		
+		
+		double [] result = {rs.getDouble(1), rs.getInt(2)};
+		
+		
+		
+		DBConnection.disconnect(rs, st, connection);
+		
+		return result;
+	}
+	
+	public int update(EmployeeDTO employeeDTO) throws Exception {
+		
+		Connection connection = DBConnection.getConnection();
+		
+		String sql = "UPDATE EMPLOYEES SET PHONE_NUMBER = ?, SALARY = ? "
+				+ "WHERE EMPLOYEE_ID=?";
+		PreparedStatement st = connection.prepareStatement(sql);
+		
+		st.setString(1, employeeDTO.getPhone_number());
+		st.setDouble(2, employeeDTO.getSalary());
+		st.setInt(3, employeeDTO.getEmployee_id());
+		
+		int result = st.executeUpdate();
+		
+		DBConnection.disconnert(st, connection);
+		
+		return result;
+		
+	}
+	
+	public int deleteData(EmployeeDTO employeeDTO) throws Exception{
+		
+		Connection connection = DBConnection.getConnection();
+		
+		String sql = "DELETE EMPLOYEES WHERE EMPLOYEE_ID = ?";
+		
+		PreparedStatement st = connection.prepareStatement(sql);
+		
+		st.setInt(1, employeeDTO.getEmployee_id());
+		
+		int result = st.executeUpdate();
+		
+		return result;
+		
+	}
+	
+	public int setData(EmployeeDTO employeeDTO) throws Exception {
+		Connection connection = DBConnection.getConnection();
+		
+		String sql = "INSERT INTO EMPLOYEES (EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE, JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID) "
+				+ "VALUES (EMPLOYEES_SEQ.NEXTVAL, ?, ?, ?, ?, sysdate, ?, ? , ?, ?, ?)";
+		PreparedStatement st = connection.prepareStatement(sql);
+		
+		st.setString(1, employeeDTO.getFirst_name());
+		st.setString(2, employeeDTO.getLast_name());
+		st.setString(3, employeeDTO.getEmail());
+		st.setString(4, employeeDTO.getPhone_number());
+		st.setString(5, employeeDTO.getJob_id());
+		st.setDouble(6, employeeDTO.getSalary());
+		st.setDouble(7, employeeDTO.getCommission_pct());
+		st.setInt(8, employeeDTO.getManager_id());
+		st.setInt(9, employeeDTO.getDepartment_id());
+		
+		int result = st.executeUpdate();
+		
+		return result;
+	}
+	
+	//method 1개 : query 1개 
+	
+	public ArrayList<EmployeeDTO> getFind(String search) throws Exception {
 		ArrayList<EmployeeDTO> ar = new ArrayList<EmployeeDTO>();
 		
 		Connection connection = DBConnection.getConnection();
 		
 		String sql = "SELECT * FROM EMPLOYEES WHERE LAST_NAME LIKE ?";
+		//String sql = "SELECT * FROM EMPLOYEES WHERE LAST_NAME LIKE '%'||?||'%'";
 		
 		PreparedStatement st = connection.prepareStatement(sql);
 		
 		st.setString(1, "%"+ search + "%");
+		//st.setString(1, search);
 		
 		ResultSet rs = st.executeQuery();
 		
@@ -74,17 +162,18 @@ public class EmployeeDAO {
 		return employeeDTO;
 	}
 	
-	
+	//list
 	public ArrayList<EmployeeDTO> getList() throws Exception{
 		ArrayList<EmployeeDTO> ar = new ArrayList<EmployeeDTO>();
 		Connection connection = DBConnection.getConnection();
 		
-		String sql = "SELECT EMPLOYEE_ID, LAST_NAME, FIRST_NAME, JOB_ID, DEPARTMENT_ID FROM EMPLOYEES ORDER BY HIRE_DATE DESC";
+		String sql = "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, JOB_ID, DEPARTMENT_ID "
+				+ "FROM EMPLOYEES ORDER BY HIRE_DATE DESC";
 		
 		PreparedStatement st = connection.prepareStatement(sql);
 		
 		ResultSet rs = st.executeQuery();
-		
+		//항상 SELECT의 결과물을 가지고 코드를 짠다.
 		while(rs.next()) {
 			EmployeeDTO employeeDTO = new EmployeeDTO();
 			employeeDTO.setEmployee_id(rs.getInt("EMPLOYEE_ID"));
