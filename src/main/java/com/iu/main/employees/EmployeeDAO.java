@@ -4,15 +4,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.iu.main.util.DBConnection;
 
 public class EmployeeDAO {
 	
-	public double[] getAvg() throws Exception {
+	public HashMap<String, Double> getAvg() throws Exception {
+		
+		HashMap<String, Double> map = new HashMap<String, Double>();
+		
+		
 		Connection connection = DBConnection.getConnection();
 		
-		String sql = "SELECT AVG(SALARY), SUM(SALARY) FROM EMPLOYEES";
+		String sql = "SELECT AVG(SALARY) A, SUM(SALARY) S FROM EMPLOYEES";
 		
 		PreparedStatement st = connection.prepareStatement(sql);
 		
@@ -23,16 +28,21 @@ public class EmployeeDAO {
 		System.out.println(rs.getDouble(1));
 		System.out.println(rs.getInt(2));
 		
-		//ArrayList<Double> result = new ArrayList<Double>();
+//		1. list, Array
+//		ArrayList<Double> result = new ArrayList<Double>();
+//		double [] result = {rs.getDouble(1), rs.getInt(2)};
+//		2. DTO (Class)
+//		3. map(Key, Value)
+		map.put("avg", rs.getDouble("A"));
+		map.put("sum", rs.getDouble(2));
 		
 		
-		double [] result = {rs.getDouble(1), rs.getInt(2)};
 		
 		
 		
 		DBConnection.disconnect(rs, st, connection);
 		
-		return result;
+		return map;
 	}
 	
 	public int update(EmployeeDTO employeeDTO) throws Exception {
@@ -75,18 +85,19 @@ public class EmployeeDAO {
 		Connection connection = DBConnection.getConnection();
 		
 		String sql = "INSERT INTO EMPLOYEES (EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE, JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID) "
-				+ "VALUES (EMPLOYEES_SEQ.NEXTVAL, ?, ?, ?, ?, sysdate, ?, ? , ?, ?, ?)";
+				+ "VALUES (EMPLOYEES_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ? , ?, ?, ?)";
 		PreparedStatement st = connection.prepareStatement(sql);
 		
 		st.setString(1, employeeDTO.getFirst_name());
 		st.setString(2, employeeDTO.getLast_name());
 		st.setString(3, employeeDTO.getEmail());
 		st.setString(4, employeeDTO.getPhone_number());
-		st.setString(5, employeeDTO.getJob_id());
-		st.setDouble(6, employeeDTO.getSalary());
-		st.setDouble(7, employeeDTO.getCommission_pct());
-		st.setInt(8, employeeDTO.getManager_id());
-		st.setInt(9, employeeDTO.getDepartment_id());
+		st.setString(5, employeeDTO.getHire_date());
+		st.setString(6, employeeDTO.getJob_id());
+		st.setDouble(7, employeeDTO.getSalary());
+		st.setDouble(8, employeeDTO.getCommission_pct());
+		st.setInt(9, employeeDTO.getManager_id());
+		st.setInt(10, employeeDTO.getDepartment_id());
 		
 		int result = st.executeUpdate();
 		
@@ -117,7 +128,7 @@ public class EmployeeDAO {
 			employeeDTO.setLast_name(rs.getString("LAST_NAME"));
 			employeeDTO.setEmail(rs.getString("EMAIL"));
 			employeeDTO.setPhone_number(rs.getString("PHONE_NUMBER"));
-			employeeDTO.setHire_date(rs.getDate("HIRE_DATE"));
+			employeeDTO.setHire_date(rs.getString("HIRE_DATE"));
 			employeeDTO.setJob_id(rs.getString("JOB_ID"));
 			employeeDTO.setSalary(rs.getDouble("SALARY"));
 			employeeDTO.setCommission_pct(rs.getDouble("COMMISSION_PCT"));
@@ -151,7 +162,7 @@ public class EmployeeDAO {
 			employeeDTO.setLast_name(rs.getString("LAST_NAME"));
 			employeeDTO.setEmail(rs.getString("EMAIL"));
 			employeeDTO.setPhone_number(rs.getString("PHONE_NUMBER"));
-			employeeDTO.setHire_date(rs.getDate("HIRE_DATE"));
+			employeeDTO.setHire_date(rs.getString("HIRE_DATE"));
 			employeeDTO.setJob_id(rs.getString("JOB_ID"));
 			employeeDTO.setSalary(rs.getDouble("SALARY"));
 			employeeDTO.setCommission_pct(rs.getDouble("COMMISSION_PCT"));

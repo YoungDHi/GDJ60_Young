@@ -14,32 +14,10 @@ public class JDBCMain {
 
 	public static void main(String[] args) {
 		System.out.println("start");
-		LocationController lc = new LocationController();
-		DepartmentController dc = new DepartmentController();
-		EmployeeController ec = new EmployeeController();
-		DepartmentDAO departmentDAO = new DepartmentDAO();
-		LocationDAO locationDAO = new LocationDAO();
-		EmployeeDAO employeeDAO = new EmployeeDAO();
+		
+		FrontController fc = new FrontController();
 		try {
-//			double result[] = employeeDAO.getAvg();
-			
-//			System.out.println("Avg : "+result[0]);
-//			System.out.println("Sum : "+result[1]);
-			
-			ec.start();
-//			LocationDTO locationDTO = new LocationDTO();
-//			locationDTO.setLocation_id(3300);
-//			
-//			
-//			
-//			int result = locationDAO.deleteData(locationDTO);
-//			
-//			
-//			if(result>0) {
-//			System.out.println("성공");
-//			}else {
-//				System.out.println("실패");
-//			}
+			fc.start();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
