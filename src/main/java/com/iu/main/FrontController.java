@@ -6,6 +6,7 @@ import com.iu.main.countries.CountryCountroller;
 import com.iu.main.departments.DepartmentController;
 import com.iu.main.employees.EmployeeController;
 import com.iu.main.locations.LocationController;
+import com.iu.main.regions.RegionController;
 
 public class FrontController {
 	private Scanner sc;
@@ -13,6 +14,7 @@ public class FrontController {
 	private LocationController locationController;
 	private EmployeeController employeeController;
 	private CountryCountroller countryCountroller;
+	private RegionController regionController;
 	
 	public  FrontController() {
 		this.sc=new Scanner(System.in);
@@ -20,7 +22,7 @@ public class FrontController {
 		this.locationController = new LocationController();
 		this.employeeController = new EmployeeController();
 		this.countryCountroller = new CountryCountroller();
-		
+		this.regionController = new RegionController();
 	}
 	
 	public void start() throws Exception{
@@ -31,7 +33,8 @@ public class FrontController {
 			System.out.println("2. 지역 관리");
 			System.out.println("3. 사원 관리");
 			System.out.println("4. 나라 관리");
-			System.out.println("5. 종    료");
+			System.out.println("5. 대륙 관리");
+			System.out.println("6. 종    료");
 			int select = sc.nextInt();
 			
 			switch(select) {
@@ -46,6 +49,10 @@ public class FrontController {
 				break;
 			case 4:
 				this.countryCountroller.start();
+				break;
+			case 5:
+				this.regionController.start();
+				break;
 			default:
 				check = false;
 			}
