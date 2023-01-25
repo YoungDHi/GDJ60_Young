@@ -2,6 +2,8 @@ package com.iu.main.employees;
 
 import java.sql.Date;
 
+import com.iu.main.departments.DepartmentDTO;
+
 public class EmployeeDTO {
 
 	private Integer employee_id;
@@ -10,17 +12,15 @@ public class EmployeeDTO {
 	private String email;
 	private String phone_number;
 	private String hire_date;
-	public void setHire_date(String hire_date) {
-		this.hire_date = hire_date;
-	}
-	public String getHire_date() {
-		return hire_date;
-	}
 	private String job_id;
 	private Double salary;
 	private Double commission_pct;
 	private Integer manager_id;
 	private Integer department_id;
+	
+	
+	
+	
 	
 	public Integer getEmployee_id() {
 		return employee_id;
@@ -58,6 +58,12 @@ public class EmployeeDTO {
 //	public void setHire_date(Date hire_date) {
 //		this.hire_date = hire_date;
 //	}
+	public void setHire_date(String hire_date) {
+		this.hire_date = hire_date;
+	}
+	public String getHire_date() {
+		return hire_date;
+	}
 	public String getJob_id() {
 		return job_id;
 	}
